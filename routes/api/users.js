@@ -7,12 +7,22 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+//load input validation
+const validateRegisterInput = require('../../validations/register');
+const validateLoginInput = require('../../validations/login');
+
 router.get('/test', (req, res) => res.json({msg: 'it works'}));
 
 //@route  POST api/users/register
 //@desc   Register user
 //@access Public
 router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+  //check validation
+  if(!isValid){
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email })
     .then(user => {
       if(user){
@@ -47,6 +57,12 @@ router.post('/register', (req, res) => {
 //@desc   User login / Returning JWT Token
 //@access Public
 router.post('/login', (req, res) => {
+  const {errors, isValid} = validateLoginInput(req.body);
+  //check validation
+  if(!isValid){
+    return res.status(400).json(errors);
+  }
+  
   const email = req.body.email;
   const password = req.body.password;
 
