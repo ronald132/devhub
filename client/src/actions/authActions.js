@@ -24,6 +24,7 @@ export const loginUser = (userData) => dispatch => {
     .then(res => {
       //save token to local storage
       const { token } = res.data;
+      //set token to local storage
       localStorage.setItem('jwtToken', token);
       //set token to auth header
       setAuthToken(token);
@@ -32,12 +33,12 @@ export const loginUser = (userData) => dispatch => {
       //set current user
       dispatch(setCurrentUser(decoded));
     })
-    .catch(err => 
+    .catch(err => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
       })  
-    );
+    });
 };
 
 //set login user
