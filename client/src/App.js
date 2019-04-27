@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
-import { setCurrentUser } from './actions/authActions';
+import { setCurrentUser, logoutUser } from './actions/authActions';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -25,6 +25,15 @@ if(localStorage.jwtToken){
   const decoded = jwt_decode(localStorage.jwtToken);
   //set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
+  //check for expired token
+  const currentTime = Date.now() / 1000;
+  if(decoded.exp < currentTime){
+    //logout user
+    store.dispatch(logoutUser());
+    //TODO: clear current profile
+    //redirect to login
+    window.location.href = '/login';
+  }
 }
 
  
