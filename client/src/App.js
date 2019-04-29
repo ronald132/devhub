@@ -9,7 +9,8 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './components/common/PrivateRoute';
 
 //Redux
 import { Provider } from 'react-redux';
@@ -30,7 +31,7 @@ if(localStorage.jwtToken){
   const currentTime = Date.now() / 1000;
   if(decoded.exp < currentTime){
     //logout user
-    store.dispatch(logoutUser());
+    store.dispatch(logoutUser(this.props.history));
     store.dispatch(clearCurrentProfile());
     //TODO: clear current profile
     //redirect to login
@@ -50,7 +51,9 @@ class App extends Component {
           <div className="container">
             <Route exact path="/register" component={ Register } />
             <Route exact path="/login" component={ Login } />
-            <Route exact path="/dashboard" component={ Dashboard } />
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={ Dashboard } />
+            </Switch>
           </div>
           <Footer/>
           </div>
