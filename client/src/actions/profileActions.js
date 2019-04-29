@@ -18,18 +18,18 @@ export const getCurrentProfile = () => dispatch => {
         payload: {}
       })
     );
-}
+};
 
 //Profile loading
 export const setProfileLoading = () => {
   return {
     type: PROFILE_LOADING
   }
-}
+};
 
 //Clear profile
 export const clearCurrentProfile = () => {
   return {
     type: CLEAR_CURRENT_PROFILE
   }
-}
+};
