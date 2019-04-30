@@ -239,8 +239,10 @@ router.delete('/education/:edu_id', passport.authenticate('jwt', {session: false
 router.delete('/', passport.authenticate('jwt', {session: false}), (req, res) => { 
   Profile.findOneAndRemove({user: req.user.id})
     .then(() => {
-      User.findByIdAndRemove({_id: req.user.id})
-        then(() => res.json({success: true}) );
+      User.findOneAndRemove({_id: req.user.id})
+        .then(() => {
+          res.json({ success: true }) 
+        });
     })
     .catch(err => res.status(400).json({deleteuser: 'delete user and profile failed'}));
 });
